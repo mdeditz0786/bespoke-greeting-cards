@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { CardCreator } from "@/components/CardCreator";
 import { PremiumSection } from "@/components/PremiumSection";
@@ -22,13 +23,15 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
+
   const occasions = [
-    { icon: Cake, title: "Birthday Wishes", desc: "Special birthday cards with name & photo", color: "bg-pink-100 text-pink-600" },
-    { icon: Heart, title: "Marriage & Anniversary", desc: "Romantic cards for special moments", color: "bg-red-100 text-red-600" },
-    { icon: Gift, title: "Festival Greetings", desc: "Diwali, Eid, Holi celebration cards", color: "bg-orange-100 text-orange-600" },
-    { icon: Baby, title: "New Baby", desc: "Congratulate new parents", color: "bg-blue-100 text-blue-600" },
-    { icon: Sun, title: "Good Morning", desc: "Start the day with wishes", color: "bg-yellow-100 text-yellow-600" },
-    { icon: Moon, title: "Good Night", desc: "Sweet dreams messages", color: "bg-purple-100 text-purple-600" },
+    { icon: Cake, title: "Birthday Wishes", desc: "Special birthday cards with name & photo", color: "bg-pink-100 text-pink-600", key: "birthday" },
+    { icon: Heart, title: "Marriage & Anniversary", desc: "Romantic cards for special moments", color: "bg-red-100 text-red-600", key: "marriage" },
+    { icon: Gift, title: "Festival Greetings", desc: "Diwali, Eid, Holi celebration cards", color: "bg-orange-100 text-orange-600", key: "festival" },
+    { icon: Baby, title: "New Baby", desc: "Congratulate new parents", color: "bg-blue-100 text-blue-600", key: "baby" },
+    { icon: Sun, title: "Good Morning", desc: "Start the day with wishes", color: "bg-yellow-100 text-yellow-600", key: "morning" },
+    { icon: Moon, title: "Good Night", desc: "Sweet dreams messages", color: "bg-purple-100 text-purple-600", key: "morning" },
   ];
 
   const features = [
@@ -36,6 +39,19 @@ const Index = () => {
     { icon: Share2, title: "WhatsApp Share", desc: "Direct share to WhatsApp with one click" },
     { icon: Sparkles, title: "100+ Templates", desc: "Beautiful designs for every occasion" },
   ];
+
+  const handleOccasionSelect = (occasionKey: string) => {
+    setSelectedOccasion(occasionKey);
+  };
+
+  const handleBackToHome = () => {
+    setSelectedOccasion(null);
+  };
+
+  // If an occasion is selected, show the CardCreator
+  if (selectedOccasion) {
+    return <CardCreator occasion={selectedOccasion} onBack={handleBackToHome} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-yellow-50">
@@ -95,7 +111,11 @@ const Index = () => {
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-gray-800">{occasion.title}</h3>
                   <p className="text-gray-600">{occasion.desc}</p>
-                  <Button className="mt-4 w-full" variant="outline">
+                  <Button 
+                    className="mt-4 w-full" 
+                    variant="outline"
+                    onClick={() => handleOccasionSelect(occasion.key)}
+                  >
                     View Templates
                   </Button>
                 </CardContent>
@@ -137,9 +157,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Card Creator Section */}
-      <CardCreator />
 
       {/* Premium Section */}
       <PremiumSection />
